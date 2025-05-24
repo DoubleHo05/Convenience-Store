@@ -1,0 +1,18 @@
+services:
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=baodz
+      - MYSQL_USER=giabao
+      - MYSQL_PASSWORD=giabao
+      - MYSQL_DATABASE=my_store
+  
+  script:
+    image: script
+    depends_on:
+      - mysql
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=giabao
+      - MYSQL_PASSWORD=giabao
+      - MYSQL_DATABASE=my_store
