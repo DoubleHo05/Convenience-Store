@@ -15,3 +15,7 @@ A MySQL project building database for a small convenience store
 - `Faker` library for generating fake data
 
 ## Documentation: [Check my documentation here](https://docs.google.com/document/d/1Vjy4Qsx-DsaLgSjiEALoNJPPyocEA90FyKWRs5tjWQc/edit?tab=t.4je3qo5c3r6d)
+
+## How to run the project with Docker
+- Step 1: Clone this repo: git clone https://github.com/DoubleHo05/Convenience-Store
+- Step 2: Run this in terminal: docker compose up (There will be "extracted" folder in your working directory which contains csv files with data from the database)

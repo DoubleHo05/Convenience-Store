@@ -6,7 +6,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install necessary things
 RUN apt-get update && \
     apt-get install -y python3 python3-pip && \
-    apt-get install -y default-mysql-client && \
     apt-get install -y netcat && \
     rm -rf /var/lib/apt/lists/*
 
@@ -14,11 +13,11 @@ RUN apt-get update && \
 RUN pip3 install faker mysql-connector-python
 
 # Custom entrypoint
-COPY wait_for_mysql.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/wait_for_mysql.sh
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Working folder
 WORKDIR /app
 COPY . .
 
-ENTRYPOINT [ "/usr/local/bin/wait_for_mysql.sh" ]
+ENTRYPOINT [ "/usr/local/bin/docker-entrypoint.sh" ]

@@ -2,7 +2,7 @@ services:
   mysql:
     image: mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=baodz
+      - MYSQL_ROOT_PASSWORD=dewithbao
       - MYSQL_USER=giabao
       - MYSQL_PASSWORD=giabao
       - MYSQL_DATABASE=my_store
@@ -16,3 +16,6 @@ services:
       - MYSQL_USER=giabao
       - MYSQL_PASSWORD=giabao
       - MYSQL_DATABASE=my_store
+      - PORT=3306
+    volumes:
+      - ./extracted:/app/extracted

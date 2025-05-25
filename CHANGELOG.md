@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.1] (2025-05-24)
+### Changes:
+- Modify script Dockerfile
+
 ## [1.2.0] (2025-05-24)
 ### Updates:
 - docker-entrypoint.sh for creating user, update root password, allow remote access
