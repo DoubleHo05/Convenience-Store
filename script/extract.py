@@ -1,104 +1,89 @@
-import mysql.connector
 import csv
 import os
+import mysql.connector
 
-connection = mysql.connector.connect(
-    host=os.getenv("MYSQL_HOST"),
-    user=os.getenv("MYSQL_USER"),
-    password=os.getenv("MYSQL_PASSWORD"),
-    database=os.getenv("MYSQL_DATABASE") 
-)
-cursor = connection.cursor()
+# Database environment variables for connection
+DB_HOST = os.getenv("MYSQL_HOST")
+DB_USER = os.getenv("MYSQL_USER")
+DB_PASSWORD = os.getenv("MYSQL_PASSWORD")
+DB_NAME = os.getenv("MYSQL_DATABASE")
 
-def extract_categories():
-    query = """SELECT * FROM CATEGORY"""
-    cursor.execute(query)
-    result = cursor.fetchall()
-    
-    with open('extracted/categories.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(i[0] for i in cursor.description)
-        writer.writerows(result)
+OUTPUT_DIRECTORY = "extracted"
 
-def extract_products():
-    query = """SELECT * FROM PRODUCT"""
-    cursor.execute(query)
-    result = cursor.fetchall()
-    
-    with open('extracted/products.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(i[0] for i in cursor.description)
-        writer.writerows(result)
 
-def extract_employees():
-    query = """SELECT * FROM EMPLOYEE"""
-    cursor.execute(query)
-    result = cursor.fetchall()
+def extract_table_to_csv(cursor, table_name, filename):
+    """Extracts all data from a given table and writes it to a CSV file.
 
-    with open('extracted/employees.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(i[0] for i in cursor.description)
-        writer.writerows(result)
+    Keyword arguments:
+    cursor -- The database cursor object.
+    table_name -- The name of the table to extract data from.
+    filename -- The name of the CSV file to write to.
+    """
+    query = f"select * from {table_name}"
+    try:
+        cursor.execute(query)
+        result = cursor.fetchall()
 
-def extract_invoices():
-    query = """SELECT * FROM INVOICE"""
-    cursor.execute(query)
-    result = cursor.fetchall()
-    
-    with open('extracted/invoices.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(i[0] for i in cursor.description)
-        writer.writerows(result)
+        os.makedirs(OUTPUT_DIRECTORY, exist_ok=True)
+        
+        file_path = os.path.join(OUTPUT_DIRECTORY, filename)
 
-def extract_invoices_detail():
-    query = """SELECT * FROM INVOICE_DETAIL"""
-    cursor.execute(query)
-    result = cursor.fetchall()
+        with open(file_path, 'w', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            if cursor.description:
+                writer.writerow([desc[0] for desc in cursor.description])
+            writer.writerows(result)
+        print(f"Successfully extracted {table_name} to {file_path}")
 
-    with open('extracted/invoices_detail.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(i[0] for i in cursor.description)
-        writer.writerows(result)
+    except mysql.connector.Error as err:
+        print(f"Error executing query for table {table_name}: {err}")
+    except IOError as e:
+        print(f"Error writing file {filename}: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred while processing {table_name}: {e}")
 
-def extract_suppliers():
-    query = """SELECT * FROM SUPPLIER"""
-    cursor.execute(query)
-    result = cursor.fetchall()
-    
-    with open('extracted/suppliers.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(i[0] for i in cursor.description)
-        writer.writerows(result)
 
-def extract_import_orders():
-    query = """SELECT * FROM IMPORT_ORDER"""
-    cursor.execute(query)
-    result = cursor.fetchall()
-    
-    with open('extracted/import_orders.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(i[0] for i in cursor.description)
-        writer.writerows(result)
+def main():
+    """
+    Main function to connect to the database and extract all specified tables.
+    """
 
-def extract_import_orders_detail():
-    query = """SELECT * FROM IMPORT_ORDER_DETAIL"""
-    cursor.execute(query)
-    result = cursor.fetchall()
-    
-    with open('extracted/import_orders_detail.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(i[0] for i in cursor.description)
-        writer.writerows(result)
+    connection = None
+    try:
+        connection = mysql.connector.connect(
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME
+        )
+        cursor = connection.cursor()
+        print("Successfully connected to the database.")
 
-os.makedirs('extracted', exist_ok=True)
-extract_categories()
-extract_products()
-extract_employees()
-extract_invoices()
-extract_invoices_detail()
-extract_suppliers()
-extract_import_orders()
-extract_import_orders_detail()
+        tables_to_extract = {
+            "CATEGORY": "categories.csv",
+            "PRODUCT": "products.csv",
+            "EMPLOYEE": "employees.csv",
+            "INVOICE": "invoices.csv",
+            "INVOICE_DETAIL": "invoices_detail.csv",
+            "SUPPLIER": "suppliers.csv",
+            "IMPORT_ORDER": "import_orders.csv",
+            "IMPORT_ORDER_DETAIL": "import_orders_detail.csv"
+        }
 
-cursor.close()
-connection.close()
+        for table_name, csv_filename in tables_to_extract.items():
+            extract_table_to_csv(cursor, table_name, csv_filename)
+
+    except mysql.connector.Error as err:
+        print(f"Database connection error: {err}")
+    except Exception as e:
+        print(f"An unexpected error occurred in main: {e}")
+    finally:
+        if 'cursor' in locals() and cursor:
+            cursor.close()
+        if connection and connection.is_connected():
+            connection.close()
+            print("Database connection closed.")
+
+
+if __name__ == "__main__":
+    main()

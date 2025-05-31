@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.2.2] (2025-05-31)
+- Modify script to obey PEP8
+
 ## [1.2.1] (2025-05-24)
 ### Changes:
 - Modify script Dockerfile

@@ -1,6 +1,9 @@
-# My Store
+# Convenience Store
+A DE project which uses Python to build, generate and extract data for a MySQL database of a small convenience store
 
-A MySQL project building database for a small convenience store
+## Prerequisites
+- Python 3.11+
+- MySQL Server
 
 ## Features
 - SQL code for creating tables.
