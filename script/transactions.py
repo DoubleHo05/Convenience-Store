@@ -55,7 +55,12 @@ def take_data():
 
 
 def generate_invoice(cursor, num_invoices):
-    """Generates a specified number of invoices and their details."""
+    """Generates a specified number of invoices and their details.
+    
+    Keyword arguments:
+    cursor -- the database cursor
+    num_invoices -- the number of invoices will be created
+    """
     if not employees_list or not product_prices:
         print("Cannot generate invoices: Employee or product data is missing.")
         return
@@ -121,7 +126,12 @@ def generate_invoice(cursor, num_invoices):
 
 
 def generate_import(cursor, num_imports):
-    """Generates a specified number of import orders and their details."""
+    """Generates a specified number of import orders and their details.
+    
+    Keyword arguments:
+    cursor -- the database cursor
+    num_imports -- the number of imports will be created
+    """
     if not suppliers_products or not product_prices:
         print("Cannot generate imports: Supplier or product data is missing.")
         return
