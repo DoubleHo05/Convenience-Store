@@ -73,6 +73,9 @@ This project can also run using Docker. This simplifies setup and ensures a cons
 * [Docker Compose](https://docs.docker.com/compose/install/) installed on your system.
 
 ### Set up
+* Clone the repository:
+    ```bash
+    git clone https://github.com/DoubleHo05/Convenience-Store
 * Create `.env`, which provides the environment variables for `docker-compose.yaml`, in the root directory of the project.
     ```
     MYSQL_ROOT_PASSWORD=<your_root_password>
@@ -88,4 +91,4 @@ This project can also run using Docker. This simplifies setup and ensures a cons
     ```bash
     docker compose up -d
     ```
-3. Folder `extracted` will be created and CSV files which contains data from database are put there. 
+3. Folder `extracted` will be created in the root directory and CSV files which contains data from database are put there. 
