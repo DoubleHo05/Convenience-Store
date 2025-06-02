@@ -1,4 +1,4 @@
-create database my_store;
+create database if not exists my_store;
 use my_store;
 
 create table CATEGORY

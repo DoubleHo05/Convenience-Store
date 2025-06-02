@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.2.3] (2025-06-02)
+- Modify README.md
+
 ## [1.2.2] (2025-05-31)
 - Modify script to obey PEP8
 

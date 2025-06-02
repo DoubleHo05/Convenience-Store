@@ -1,21 +1,25 @@
+version: '3.8'
+
+
 services:
   mysql:
-    image: mysql
+    build: ./mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=dewithbao
-      - MYSQL_USER=giabao
-      - MYSQL_PASSWORD=giabao
-      - MYSQL_DATABASE=my_store
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
   
   script:
+    build: ./script
     image: script
     depends_on:
       - mysql
     environment:
       - MYSQL_HOST=mysql
-      - MYSQL_USER=giabao
-      - MYSQL_PASSWORD=giabao
-      - MYSQL_DATABASE=my_store
-      - PORT=3306
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - PORT=${PORT}
     volumes:
       - ./extracted:/app/extracted

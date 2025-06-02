@@ -24,14 +24,14 @@ def take_data():
     try:
         with open('employees.csv', 'r', newline='') as file:
             reader = csv.reader(file)
-            next(reader)  # Skip header row
+            next(reader)
             for row in reader:
                 employee_id = row[0]
                 employees_list.append(employee_id)
 
         with open('products.csv', 'r', newline='') as file:
             reader = csv.reader(file)
-            next(reader)  # Skip header row
+            next(reader)
             for row in reader:
                 product_id, price, supplier_name = row
                 product_prices[product_id] = price
@@ -62,7 +62,7 @@ def generate_invoice(cursor, num_invoices):
 
     for _ in range(num_invoices):
         now = datetime.now()
-        invoice_id = now.strftime("%Y%m%d%H%M%S") # Added microseconds for better uniqueness
+        invoice_id = now.strftime("%Y%m%d%H%M%S")
         employee_id = random.choice(employees_list)
         purchase_date = now.strftime("%Y-%m-%d %H:%M:%S")
         total_amount = 0
@@ -80,7 +80,7 @@ def generate_invoice(cursor, num_invoices):
             print(f"Warning: No products available to add to invoice {invoice_id}.")
             continue
         if len(available_products) < num_items_in_invoice:
-            num_items_in_invoice = len(available_products) # Adjust if not enough unique products
+            num_items_in_invoice = len(available_products)
 
         ordered_products = random.sample(available_products, k=num_items_in_invoice)
 
@@ -187,7 +187,7 @@ def generate_import(cursor, num_imports):
         values_total_update = (round(total_amount, 2), import_order_id)
         cursor.execute(sql_update_import_total, values_total_update)
 
-        time.sleep(1) # Reduced sleep time
+        time.sleep(1)
 
 
 def main():
