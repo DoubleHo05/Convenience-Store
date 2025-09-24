@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create
+spec:
+  template:
+    spec:
+      volumes:
+        - name: shared-files
+          persistentVolumeClaim:
+            claimName: my-files-claim
+      containers:
+      - name: create
+        image: doubleho/store:create
+        env:
+          - name: MYSQL_HOST
+            value: mysql-svc          
+          - name: MYSQL_DATABASE
+            value: my_store           
+          - name: MYSQL_USER
+            value: giabao             
+          - name: MYSQL_PASSWORD
+            value: giabao   
+          - name: PORT
+            value: "3306"
+
+        volumeMounts:
+        - name: shared-files
+          mountPath:  /app/ft
+      restartPolicy: Never # This time we'll run it only once

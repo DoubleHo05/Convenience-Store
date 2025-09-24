@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: extract
+spec:
+  schedule: "* * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes: 
+            - name: extracted-files
+              persistentVolumeClaim:
+                claimName: ext-claim
+
+          containers:
+          - name: extract
+            image: doubleho/store:extract
+            env:
+            - name: MYSQL_HOST
+              value: mysql-svc          
+            - name: MYSQL_DATABASE
+              value: my_store           
+            - name: MYSQL_USER
+              value: giabao             
+            - name: MYSQL_PASSWORD
+              value: giabao   
+            - name: PORT
+              value: "3306"
+
+            volumeMounts:
+            - name: extracted-files
+              mountPath: /app/extracted
+          restartPolicy: OnFailure

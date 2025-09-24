@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.0] (2025-09-24)
+- Split "script image" into 3 different images for easier bringing the project to Kubernetes
+- Write yaml files to create resources in Kubernetes
+
 ## [1.2.3] (2025-06-02)
 - Modify README.md
 

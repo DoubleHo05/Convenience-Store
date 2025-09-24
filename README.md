@@ -92,3 +92,44 @@ This project can also run using Docker. This simplifies setup and ensures a cons
     docker compose up -d
     ```
 3. Folder `extracted` will be created in the root directory and CSV files which contains data from database are put there. 
+
+
+---
+## Bring the project to Kubernetes 
+We can also run the project with a Kubernetes cluster running in containers with k3d.
+
+### Prerequisites
+* [Docker](https://www.docker.com/get-started)
+* [k3d](https://github.com/k3d-io/k3d#get)
+* [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+
+### Set up
+* Clone the repository:
+    ```bash
+    git clone https://github.com/DoubleHo05/Convenience-Store
+
+### Run the project
+1. Navigate to the root directory of the project.
+2. **Run this in terminal**:
+    ```bash
+    k3d cluster create -a 2
+    ```
+    This will create a cluster with 2 agent nodes, each node is actually a container.
+3. **Run this to create objects**:
+    ```bash
+    kubectl apply -f k8s/
+    ```
+4. Since we have 2 PersistentVolumes and both of them are located with the path /tmp/kube in 2 agent    nodes, so we must create that directory in 2 agent nodes.
+
+    **Run this in terminal:**
+    ```bash
+    docker exec -it k3d-k3s-default-agent-0 sh
+    ```
+
+    **then**:
+    ```bash
+    mkdir -p tmp/kube
+    ```
+
+    Repeat the same with k3d-k3s-default-agent-1.
+5. The extracted files are in k3d-k3s-default-agent-1 container, you can go to /tmp/kube in that container and have a look.

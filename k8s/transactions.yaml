@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transaction-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transaction
+  template:
+    metadata:
+      labels:
+        app: transaction
+    spec:
+      volumes:
+        - name: shared-files
+          persistentVolumeClaim:
+            claimName: my-files-claim
+      containers:
+        - name: transactions
+          image: doubleho/store:transaction
+          env:
+          - name: MYSQL_HOST
+            value: mysql-svc          
+          - name: MYSQL_DATABASE
+            value: my_store           
+          - name: MYSQL_USER
+            value: giabao             
+          - name: MYSQL_PASSWORD
+            value: giabao   
+          - name: PORT
+            value: "3306"
+
+          volumeMounts:
+          - name: shared-files
+            mountPath: /app/ft
