@@ -14,7 +14,7 @@ done
 
 echo "MySQL is up - executing command"
 
-while :
+for ((i=0; i <= 10; i++));
 do
   python3 transactions.py || echo "Transaction failed"
   sleep 3

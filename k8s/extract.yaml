@@ -19,15 +19,30 @@ spec:
             image: doubleho/store:extract
             env:
             - name: MYSQL_HOST
-              value: mysql-svc          
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_HOST
             - name: MYSQL_DATABASE
-              value: my_store           
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_DATABASE
             - name: MYSQL_USER
-              value: giabao             
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_USER
             - name: MYSQL_PASSWORD
-              value: giabao   
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_PASSWORD
             - name: PORT
-              value: "3306"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: PORT
 
             volumeMounts:
             - name: extracted-files

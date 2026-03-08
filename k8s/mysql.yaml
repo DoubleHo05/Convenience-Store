@@ -35,13 +35,25 @@ spec:
               containerPort: 3306
           env:
           - name: MYSQL_ROOT_PASSWORD
-            value: doubleho
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key: MYSQL_ROOT_PASSWORD
           - name: MYSQL_DATABASE
-            value: my_store
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key: MYSQL_DATABASE
           - name: MYSQL_USER
-            value: giabao
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key: MYSQL_USER
           - name: MYSQL_PASSWORD
-            value: giabao
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key: MYSQL_PASSWORD
           volumeMounts:
             - name: data
               mountPath: /var/lib/mysql
@@ -53,4 +65,4 @@ spec:
         storageClassName: local-path
         resources:
           requests:
-            storage: 1Gi 
+            storage: 1Gi

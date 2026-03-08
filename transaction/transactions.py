@@ -122,7 +122,7 @@ def generate_invoice(cursor, num_invoices):
         values_total_update = (round(total_amount, 2), invoice_id)
         cursor.execute(sql_update_invoice_total, values_total_update)
 
-        time.sleep(1)
+        time.sleep( 1)
 
 
 def generate_import(cursor, num_imports):

@@ -1,0 +1,21 @@
+executor: LocalExecutor # This is used for simple set up
+
+images:
+  airflow:
+    repository: airflow-custom  # Airflow custom image
+    tag: v1
+    pullPolicy: IfNotPresent
+
+postgresql:
+  image:
+    tag: latest
+
+dags:
+  gitSync:
+    enabled: false
+
+redis:
+  enabled: false
+
+triggerer:
+  replicas: 0 

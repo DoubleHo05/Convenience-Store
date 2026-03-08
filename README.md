@@ -102,24 +102,53 @@ We can also run the project with a Kubernetes cluster running in containers with
 * [Docker](https://www.docker.com/get-started)
 * [k3d](https://github.com/k3d-io/k3d#get)
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+* [Helm](https://helm.sh/)
 
 ### Set up
-* Clone the repository:
+1. Clone the repository:
     ```bash
     git clone https://github.com/DoubleHo05/Convenience-Store
+    ```
+2. Add Airflow repository to Helm and fetch the latest chart information:
+    ```bash
+    helm repo add apache-airflow https://airflow.apache.org
+    helm repo update
+    ```
 
 ### Run the project
 1. Navigate to the root directory of the project.
+
 2. **Run this in terminal**:
     ```bash
     k3d cluster create -a 2
     ```
     This will create a cluster with 2 agent nodes, each node is actually a container.
-3. **Run this to create objects**:
-    ```bash
-    kubectl apply -f k8s/
+
+3. You need to create k8s/secret.yaml file base on this template:
+    ```yaml
+    apiVersion: v1
+    kind: Secret
+    metadata:
+    name: my-secret
+    type: Opaque
+    data:
+    MYSQL_HOST: YOUR-MYSQL-HOST
+    MYSQL_ROOT_PASSWORD: YOUR-MYSQL-ROOT-PASSWORD
+    MYSQL_USER: YOUR-MYSQL-USER
+    MYSQL_PASSWORD: YOUR-MYSQL-USER-PASSWORD
+    MYSQL_DATABASE: YOUR-MYSQL-DATABASE
+    PORT: YOUR-MYSQL-PORT (usually 3306)
     ```
-4. Since we have 2 PersistentVolumes and both of them are located with the path /tmp/kube in 2 agent    nodes, so we must create that directory in 2 agent nodes.
+
+    **Run this to create objects**:
+    ```bash
+    kubectl apply -f k8s/secret.yaml
+    kubectl apply -f k8s/extractVolume.yaml
+    kubectl apply -f k8s/filesVolume.yaml
+    kubectl apply -f k8s/mysql.yaml
+    kubectl apply -f k8s/create.yaml
+    ```
+4. Since we have 2 PersistentVolumes and both of them are located with the path /tmp/kube in 2 agent nodes, so we must create that directory in 2 agent nodes.
 
     **Run this in terminal:**
     ```bash
@@ -132,4 +161,18 @@ We can also run the project with a Kubernetes cluster running in containers with
     ```
 
     Repeat the same with k3d-k3s-default-agent-1.
-5. The extracted files are in k3d-k3s-default-agent-1 container, you can go to /tmp/kube in that container and have a look.
+
+5. Deploy Airflow using Helm.
+
+    **Run this:**
+    ```bash
+    helm install airflow apache-airflow/airflow --values airflow/values.yaml
+    ```
+
+6. Port forward to use the UI to trigger the DAG
+    ```bash
+    kubectl port-forward svc/airflow-api-server 8080:8080 --namespace default
+    ```
+8. Go to localhost:8080 on browser, login using your username and password, then you can trigger the dag manually.
+
+9. When the DAG finishes, you can see the extracted files are in the path /tmp/kube of k3d-k3s-default-agent-1 container.

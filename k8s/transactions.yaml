@@ -19,17 +19,39 @@ spec:
       containers:
         - name: transactions
           image: doubleho/store:transaction
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
           env:
           - name: MYSQL_HOST
-            value: mysql-svc          
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key: MYSQL_HOST
           - name: MYSQL_DATABASE
-            value: my_store           
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key: MYSQL_DATABASE
           - name: MYSQL_USER
-            value: giabao             
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key: MYSQL_USER
           - name: MYSQL_PASSWORD
-            value: giabao   
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key: MYSQL_PASSWORD
           - name: PORT
-            value: "3306"
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key: PORT
 
           volumeMounts:
           - name: shared-files

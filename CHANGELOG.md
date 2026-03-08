@@ -1,5 +1,9 @@
 # Changelog
 
+### [3.0] (2025-03-08)
+- Move the credentials into secret.yaml file for better security
+- Use Airflow to automate the workflow in a specific time.
+
 ## [2.1.0] (2025-09-24)
 - Split "script image" into 3 different images for easier bringing the project to Kubernetes
 - Write yaml files to create resources in Kubernetes
