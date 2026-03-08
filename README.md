@@ -95,7 +95,7 @@ This project can also run using Docker. This simplifies setup and ensures a cons
 
 
 ---
-## Bring the project to Kubernetes 
+## Bring the project to Kubernetes with Airflow
 We can also run the project with a Kubernetes cluster running in containers with k3d.
 
 ### Prerequisites
